@@ -11,6 +11,7 @@
  * @package    Sellbroke
  * @subpackage Sellbroke/admin/partials
  */
+echo "test";
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->

@@ -100,4 +100,19 @@ class Sellbroke_Admin {
 
 	}
 
+	public function add_options_page() {
+	    add_menu_page(
+	        $this->plugin_name,
+            "Sellbroke",
+            "manage_options",
+            'sellbroke',
+            array($this, "display_admin_settings_page"),
+            '',
+            26
+        );
+    }
+
+    public function display_admin_settings_page() {
+	    require_once 'partials/sellbroke-admin-display.php';
+    }
 }
