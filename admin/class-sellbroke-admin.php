@@ -40,6 +40,7 @@ class Sellbroke_Admin {
 	 */
 	private $version;
 
+	private $api;
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -49,9 +50,10 @@ class Sellbroke_Admin {
 	 */
 	public function __construct( $plugin_name, $version ) {
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-sellbroke-api.php';
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
+		$this->api = new Sellbroke_Api();
 	}
 
 	/**
@@ -114,5 +116,11 @@ class Sellbroke_Admin {
 
     public function display_admin_settings_page() {
 	    require_once 'partials/sellbroke-admin-display.php';
+    }
+
+    public function authorize() {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $this->api->auth($username, $password);
     }
 }

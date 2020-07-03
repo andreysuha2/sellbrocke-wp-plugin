@@ -39,6 +39,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'SELLBROKE_VERSION', '1.0.0' );
 define( 'SELLBROKE_TOKENS_TABLE_NAME', "{$wpdb->prefix}sellbroke_tokens" );
+define( 'SELLBROKE_API_URL', defined("SELLBROKE_DEV_API_URL") ? SELLBROKE_DEV_API_URL : "http://localhost/");
 
 /**
  * The code that runs during plugin activation.

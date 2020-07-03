@@ -11,7 +11,26 @@
  * @package    Sellbroke
  * @subpackage Sellbroke/admin/partials
  */
-echo "test";
 ?>
 
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
+<form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post" class="sellbroke">
+    <input type="hidden" name="action" value="sellbroke_authorize">
+    <div>
+        <label for="sellbroke-login">Login:</label>
+        <input id="sellbroke-login"
+               type="text"
+               name="username"
+               placeholder="Login">
+    </div>
+    <div>
+        <label for="sellbroke-password">Password:</label>
+        <input id="sellbroke-password"
+               type="password"
+               name="password"
+               placeholder="password">
+    </div>
+    <div>
+        <button>Authorize</button>
+    </div>
+</form>
