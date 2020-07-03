@@ -29,8 +29,12 @@ class Sellbroke_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
+	public static function deactivate($table_name) {
+		global $wpdb;
 
+		$table_name = "{$wpdb->prefix}{$table_name}";
+		// if( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
+	    $wpdb->query( "DROP TABLE `{$table_name}`" );
 	}
 
 }

@@ -20,7 +20,6 @@
  * @subpackage Sellbroke/includes
  */
 class Sellbroke_Activator {
-
 	/**
 	 * Short Description. (use period)
 	 *
@@ -28,8 +27,22 @@ class Sellbroke_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
+	public static function activate($table_name) {
+		global $wpdb;
 
+		$table_name = "{$wpdb->prefix}{$table_name}";
+
+		$sql = "CREATE TABLE `{$table_name}` (
+			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
+			`access_token` text NOT NULL,
+			`refresh_token` text NOT NULL,
+			`expired_at` datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+			`created_at` datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+			PRIMARY KEY  (id)
+		) {$charset_collate};";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
 	}
 
 }

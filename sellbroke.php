@@ -38,12 +38,18 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'SELLBROKE_VERSION', '1.0.0' );
 
 /**
+ * The core plugin class that is used to define internationalization,
+ * admin-specific hooks, and public-facing site hooks.
+ */
+require plugin_dir_path( __FILE__ ) . 'includes/class-sellbroke.php';
+
+/**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-sellbroke-activator.php
  */
 function activate_sellbroke() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-sellbroke-activator.php';
-	Sellbroke_Activator::activate();
+	Sellbroke_Activator::activate(Sellbroke::$table_name);
 }
 
 /**
@@ -52,17 +58,11 @@ function activate_sellbroke() {
  */
 function deactivate_sellbroke() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-sellbroke-deactivator.php';
-	Sellbroke_Deactivator::deactivate();
+	Sellbroke_Deactivator::deactivate(Sellbroke::$table_name);
 }
 
 register_activation_hook( __FILE__, 'activate_sellbroke' );
 register_deactivation_hook( __FILE__, 'deactivate_sellbroke' );
-
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-sellbroke.php';
 
 /**
  * Begins execution of the plugin.
