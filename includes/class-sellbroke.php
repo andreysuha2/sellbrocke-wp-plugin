@@ -67,8 +67,6 @@ class Sellbroke {
 	 * @since    1.0.0
 	 */
 
- 	public static $table_name = 'sellbroke_tokens';
-
 	public function __construct() {
 		if ( defined( 'SELLBROKE_VERSION' ) ) {
 			$this->version = SELLBROKE_VERSION;

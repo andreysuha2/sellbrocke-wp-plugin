@@ -27,12 +27,12 @@ class Sellbroke_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate($table_name) {
+	public static function activate() {
 		global $wpdb;
 
-		$table_name = "{$wpdb->prefix}{$table_name}";
+		$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE `{$table_name}` (
+		$sql = "CREATE TABLE `" . SELLBROKE_TOKENS_TABLE_NAME . "` (
 			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
 			`access_token` text NOT NULL,
 			`refresh_token` text NOT NULL,
