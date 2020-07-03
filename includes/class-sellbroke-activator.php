@@ -36,6 +36,7 @@ class Sellbroke_Activator {
 			`id` mediumint(9) NOT NULL AUTO_INCREMENT,
 			`access_token` text NOT NULL,
 			`refresh_token` text NOT NULL,
+			`is_active` tinyint(1) NOT NULL,
 			`expired_at` datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 			`created_at` datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 			PRIMARY KEY  (id)
