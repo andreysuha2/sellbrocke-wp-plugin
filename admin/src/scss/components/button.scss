@@ -1,0 +1,13 @@
+.sellbroke-btn {
+    padding: 10px 45px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    background: linear-gradient(to top, $appColor1, $appColor2);
+    color: $appColor3;
+    transition: background-color $trEase03;
+
+    &:hover {
+        background: linear-gradient(to top, $appColor2, $appColor1);
+    }
+}

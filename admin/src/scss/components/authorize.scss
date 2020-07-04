@@ -1,0 +1,35 @@
+.sellbroke-auth {
+    max-width: 320px;
+
+    &--row {
+        display: flex;
+
+        &:not(:last-child) {
+            margin-bottom: $smMargin;
+        }
+    }
+
+    &--cell {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        &__label {
+            max-width: 100px;
+        }
+    }
+
+    &--auth-message {
+        margin-bottom: $smMargin;
+        font-size: 12px;
+        font-weight: bold;
+
+        &__guest {
+            color: red;
+        }
+
+        &__auth {
+            color: green;
+        }
+    }
+}

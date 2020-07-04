@@ -40,7 +40,7 @@ class Sellbroke_Admin {
 	 */
 	private $version;
 
-	private $api;
+	public $api;
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -75,7 +75,7 @@ class Sellbroke_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/sellbroke-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'dist/css/sellbroke-admin.min.css', array(), $this->version, 'all' );
 
 	}
 
@@ -98,7 +98,7 @@ class Sellbroke_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/sellbroke-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'dist/js/sellbroke-admin.min.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -121,6 +121,7 @@ class Sellbroke_Admin {
     public function authorize() {
         $username = $_POST["username"];
         $password = $_POST["password"];
-        $this->api->auth($username, $password);
+        echo json_encode($this->api->auth($username, $password));
+        die();
     }
 }
