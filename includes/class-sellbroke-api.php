@@ -6,11 +6,13 @@ class Sellbroke_Api {
     private $nowDate;
     private $db;
     private $datetime_format = "Y-m-d H:i:s";
-    private $client_id = 2;
-    private $client_secret = "ZNAPQMFFbWFyFYuxiAXJWS9doEnCxW5M61WzAvgi";
+    private $client_id;
+    private $client_secret;
 
     public function __construct() {
         global $wpdb;
+        $this->client_secret = defined("SELLBROKE_DEV_CLIENT_SECRET") ? SELLBROKE_DEV_CLIENT_SECRET : "";
+        $this->client_id = defined("SELLBROKE_DEV_CLIENT_ID") ? SELLBROKE_DEV_CLIENT_ID : "";
         $this->db = $wpdb;
         $this->nowDate = new DateTime();
     }
@@ -42,6 +44,34 @@ class Sellbroke_Api {
                   WHERE `is_active` = '1'
                   AND DATE(`expired_at`) > '" . $this->nowDate->format($this->datetime_format) . "'"
         );
+    }
+
+    public function request($slug, $method, $body = [], $args = []) {
+        $url = $this->base_url . "/" . $slug;
+        return wp_remote_request($url, array_merge($args, [
+            "body" => $body,
+            "method" => $method,
+            "headers" => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '. $this->getToken()
+            ]
+        ]));
+    }
+
+    public function get($slug, $body = [], $args = []) {
+        return $this->request($slug, "GET", $body, $args);
+    }
+
+    public function post($slug, $body = [], $args = []) {
+        return $this->request($slug, "POST", $body, $args);
+    }
+
+    public function put($slug, $body = [], $args = []) {
+        return $this->request($slug, "PUT", $body, $args);
+    }
+
+    public function delete($slug, $body = [], $args = []) {
+        return $this->request($slug, "DELETE", $body, $args);
     }
 
     private function getToken() {
