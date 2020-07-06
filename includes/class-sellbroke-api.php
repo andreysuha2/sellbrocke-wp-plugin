@@ -30,25 +30,28 @@ class Sellbroke_Api {
         $tokenData = json_decode($tokens["body"], true);
         if(isset($tokenData["access_token"])) {
             $isInserted = $this->saveToken($tokenData);
+            $merchant = $this->getAuthMerchant();
             return [
-                "success" => true,
+                "success" => $merchant["success"],
                 "msg" => "Authorize success",
-                "isInserted" => $isInserted
+                "isInserted" => $isInserted,
+                "merchant" => $merchant["merchant"]
             ];
         } else return [ "success" => false, "msg" => "Authorize failed", "hasAuthToken" => $this->hasActiveToken() ];
     }
 
     public function hasActiveToken() {
-        return $this->db->get_var(
+        $count = $this->db->get_var(
             "SELECT COUNT(*) FROM " . SELLBROKE_TOKENS_TABLE_NAME . "
                   WHERE `is_active` = '1'
                   AND DATE(`expired_at`) > '" . $this->nowDate->format($this->datetime_format) . "'"
         );
+        return (int) $count;
     }
 
     public function request($slug, $method, $body = [], $args = []) {
         $url = $this->base_url . "/" . $slug;
-        return wp_remote_request($url, array_merge($args, [
+        $response = wp_remote_request($url, array_merge($args, [
             "body" => $body,
             "method" => $method,
             "headers" => [
@@ -56,6 +59,13 @@ class Sellbroke_Api {
                 'Authorization' => 'Bearer '. $this->getToken()
             ]
         ]));
+        $code = $response["response"]["code"];
+        return [
+            "body" => json_decode($response["body"], true),
+            "code" => $code,
+            "message" => $response["response"]["message"],
+            "success" => $code === 200 || $code === 201
+        ];
     }
 
     public function get($slug, $body = [], $args = []) {
@@ -72,6 +82,13 @@ class Sellbroke_Api {
 
     public function delete($slug, $body = [], $args = []) {
         return $this->request($slug, "DELETE", $body, $args);
+    }
+
+    public function getAuthMerchant() {
+        $merchant = $this->get("/");
+        if($merchant["success"]) {
+            return [ "merchant" => $merchant["body"]["merchant"], "success" => $merchant["success"] ];
+        } else return $merchant;
     }
 
     private function getToken() {

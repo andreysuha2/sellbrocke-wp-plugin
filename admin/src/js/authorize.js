@@ -6,6 +6,10 @@ const selectors = {
     msg: {
         auth: "#js-sellbroke-auth-message",
         guest: "#js-sellbroke-guest-message"
+    },
+    auth: {
+        id: "#js-sellbroke-auth-merchant-id",
+        name: "#js-sellbroke-auth-merchant-name"
     }
 },
     ajaxUrl = `${window.location.origin}/wp-admin/admin-ajax.php`;
@@ -20,6 +24,12 @@ class SellbrokeAuthorize {
                 value: {
                     auth: document.querySelector(selectors.msg.auth),
                     guest: document.querySelector(selectors.msg.guest)
+                }
+            },
+            $auth: {
+                value: {
+                    id: document.querySelector(selectors.auth.id),
+                    name: document.querySelector(selectors.auth.name)
                 }
             },
             login: {
@@ -56,23 +66,14 @@ class SellbrokeAuthorize {
             body: this.formData
         }).then((resp) => resp.json())
             .then((data) => {
+                console.log(data);
                 if((data.success && data.isInserted) || data.hasAuthToken) {
                     if(!data.success || !data.isInserted) {
-                        Toastify({
-                            text: "Authorization failed!",
-                            duration: 5000,
-                            close: true,
-                            position: "center",
-                            backgroundColor: "red"
-                        }).showToast();
+                        this.__showFiledMessage();
                     } else {
-                        Toastify({
-                            text: "Authorization success!",
-                            duration: 5000,
-                            close: true,
-                            position: "center",
-                            backgroundColor: "green"
-                        }).showToast();
+                        this.$auth.id.innerText = data.merchant.id;
+                        this.$auth.name.innerText = data.merchant.name;
+                        this.__showSuccessMessage();
                         this.login = "";
                         this.password = "";
                     }
@@ -83,6 +84,26 @@ class SellbrokeAuthorize {
                     this.$msg.guest.classList.remove("hidden");
                 }
             });
+    }
+
+    __showSuccessMessage() {
+        Toastify({
+            text: "Authorization success!",
+            duration: 5000,
+            close: true,
+            position: "center",
+            backgroundColor: "green"
+        }).showToast();
+    }
+
+    __showFiledMessage() {
+        Toastify({
+            text: "Authorization failed!",
+            duration: 5000,
+            close: true,
+            position: "center",
+            backgroundColor: "red"
+        }).showToast();
     }
 }
 

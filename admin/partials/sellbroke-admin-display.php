@@ -13,21 +13,35 @@
  */
 $SellbrokeApi = new Sellbroke_Api();
 $hasToken = $SellbrokeApi->hasActiveToken();
+if($hasToken) {
+    $merchant = $SellbrokeApi->getAuthMerchant();
+    $authMerchant = $merchant["success"] ? $merchant["merchant"] : null;
+} else $authMerchant = null;
 ?>
 
+<script>
+    var test = <?php echo json_encode($authMerchant); ?>;
+    console.log(test);
+</script>
 
 <div class="sellbroke">
     <form id="js-sellbroke-auth-form" class="sellbroke--auth sellbroke-auth">
         <h1 class="sellbroke-title">API Authorize</h1>
             <div
                 id="js-sellbroke-auth-message"
-                class="sellbroke-auth--auth-message sellbroke-auth--auth-message__auth <?php  if(!$hasToken) echo  'hidden' ?>">
-                <span>(Plugin is authorized!)</span>
+                class="sellbroke-auth--auth-message sellbroke-auth--auth-message__auth <?php  if(!$authMerchant) echo  'hidden' ?>">
+                <span>(Merchant is authorized)</span>
+                <p>
+                    Merchant id: <span id="js-sellbroke-auth-merchant-id"><?php echo $authMerchant ? $authMerchant["id"] : ""; ?></span>;
+                </p>
+                <p>
+                    Merchant name: <span id="js-sellbroke-auth-merchant-name"><?php echo $authMerchant ? $authMerchant["name"] : ""; ?></span>;
+                </p>
             </div>
             <div
                 id="js-sellbroke-guest-message"
-                class="sellbroke-auth--auth-message sellbroke-auth--auth-message__guest <?php  if($hasToken) echo  'hidden' ?>">
-                <span>(Plugin is not authorized!)</span>
+                class="sellbroke-auth--auth-message sellbroke-auth--auth-message__guest <?php  if($authMerchant) echo  'hidden' ?>">
+                <span>(Merchant is not authorized!)</span>
             </div>
         <div class="sellbroke-auth--row">
             <div class="sellbroke-auth--cell sellbroke-auth--cell__label">
