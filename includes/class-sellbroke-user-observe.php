@@ -16,16 +16,17 @@ class Sellbroke_User_Observe {
     }
 
     public function on_user_delete($id) {
-        write_log("DELETE USER $id");
-        write_log("---------------");
-        write_log("");
+        $this->api->deleteCustomer($id);
     }
 
     private function on_user_update($meta, $user) {
-        write_log("UPDATE USER");
-        write_log($meta);
-        write_log($user);
-        write_log("---------------");
-        write_log("");
+        $this->api->storeCustomer([
+            "merchant_customer_id" => (int) $user->data->ID,
+            "email" => $user->data->user_email,
+            "login" => $user->data->user_login,
+            "first_name" => $meta["first_name"],
+            "last_name" => $meta["last_name"],
+            "data" => json_encode($user->data)
+        ]);
     }
 }

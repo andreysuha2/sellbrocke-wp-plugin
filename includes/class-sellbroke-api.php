@@ -91,6 +91,14 @@ class Sellbroke_Api {
         } else return $merchant;
     }
 
+    public function storeCustomer($customer) {
+        return $this->post("customer", $customer);
+    }
+
+    public function deleteCustomer($customer_id) {
+        return $this->delete("customer", [ "id" => $customer_id ]);
+    }
+
     private function getToken() {
         $token = $this->db->get_row(
             "SELECT `access_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . " 
