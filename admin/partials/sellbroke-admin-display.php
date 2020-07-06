@@ -20,6 +20,7 @@ if($hasToken) {
 ?>
 
 <script>
+    window.SELLBROKE_INIT = true;
     var test = <?php echo json_encode($authMerchant); ?>;
     console.log(test);
 </script>
