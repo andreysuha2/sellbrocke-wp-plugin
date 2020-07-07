@@ -79,7 +79,7 @@ class Sellbroke {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
+		$this->define_user_observe_hooks();
 	}
 
 	/**
@@ -123,6 +123,8 @@ class Sellbroke {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-sellbroke-public.php';
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-sellbroke-user-observe.php';
+
 		$this->loader = new Sellbroke_Loader();
 
 	}
@@ -161,6 +163,12 @@ class Sellbroke {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 	}
+
+	private function define_user_observe_hooks() {
+        $plugin_user_observer = new Sellbroke_User_Observe();
+        $this->loader->add_action("insert_user_meta", $plugin_user_observer, "on_user_insert_meta", 10, 3);
+        $this->loader->add_action("delete_user", $plugin_user_observer, "on_user_delete", 10, 3);
+    }
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
