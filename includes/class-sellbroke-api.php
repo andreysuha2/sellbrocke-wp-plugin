@@ -99,6 +99,10 @@ class Sellbroke_Api {
         return $this->delete("customer", [ "id" => $customer_id ]);
     }
 
+    public function search($query) {
+        return $this->get("search/$query");
+    }
+
     private function getToken() {
         $token = $this->db->get_row(
             "SELECT `access_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . " 
