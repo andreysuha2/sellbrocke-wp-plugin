@@ -64,26 +64,30 @@ class SellbrokeAuthorize {
             method: "POST",
             credentials: 'same-origin',
             body: this.formData
-        }).then((resp) => resp.json())
-            .then((data) => {
-                console.log(data);
-                if((data.success && data.isInserted) || data.hasAuthToken) {
-                    if(!data.success || !data.isInserted) {
-                        this.__showFiledMessage();
-                    } else {
-                        this.$auth.id.innerText = data.merchant.id;
-                        this.$auth.name.innerText = data.merchant.name;
-                        this.__showSuccessMessage();
-                        this.login = "";
-                        this.password = "";
-                    }
-                    this.$msg.guest.classList.add("hidden");
-                    this.$msg.auth.classList.remove("hidden");
-                } else {
-                    this.$msg.auth.classList.add("hidden");
-                    this.$msg.guest.classList.remove("hidden");
-                }
-            });
+        })
+        .then((resp) => {
+            if (resp.ok) {
+                return resp.json();
+            } else {
+                throw 'Error: The API server is not available now, try again later!';
+            }
+        })
+        .then((data) => {
+            if(data.success && data.isInserted) {
+                this.$auth.id.innerText = data.merchant.id;
+                this.$auth.name.innerText = data.merchant.name;
+                this.__showSuccessMessage();
+                this.login = "";
+                this.password = "";
+                this.$msg.guest.classList.add("hidden");
+                this.$msg.auth.classList.remove("hidden");
+            } else {
+                this.__showFiledMessage();
+                this.$msg.auth.classList.add("hidden");
+                this.$msg.guest.classList.remove("hidden");
+            }
+        })
+        .catch(error => this.__showFiledMessage(error));
     }
 
     __showSuccessMessage() {
@@ -96,9 +100,9 @@ class SellbrokeAuthorize {
         }).showToast();
     }
 
-    __showFiledMessage() {
+    __showFiledMessage(message) {
         Toastify({
-            text: "Authorization failed!",
+            text: message || "Authorization failed!",
             duration: 5000,
             close: true,
             position: "center",

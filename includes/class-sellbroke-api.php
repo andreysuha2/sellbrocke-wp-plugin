@@ -59,6 +59,16 @@ class Sellbroke_Api {
                 'Authorization' => 'Bearer '. $this->getToken()
             ]
         ]));
+
+        if (isset($response->errors)) {
+            return [
+                "body" => "HTTP request error",
+                "code" => 500,
+                "message" => "HTTP request failed",
+                "success" => false
+            ];
+        }
+
         $code = $response["response"]["code"];
         return [
             "body" => json_decode($response["body"], true),
@@ -105,15 +115,15 @@ class Sellbroke_Api {
 
     private function getToken() {
         $token = $this->db->get_row(
-            "SELECT `access_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . " 
-                   WHERE `is_active` = '1' 
+            "SELECT `access_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . "
+                   WHERE `is_active` = '1'
                    AND DATE(`expired_at`) > '" . $this->nowDate->format($this->datetime_format) . "'");
         return $token ? $token->access_token : $this->refreshToken();
     }
 
     private function refreshToken() {
         $lastActiveToken = $this->db->get_row(
-            "SELECT `refresh_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . " 
+            "SELECT `refresh_token` FROM " . SELLBROKE_TOKENS_TABLE_NAME . "
                    WHERE `is_active` = '1'");
         if($lastActiveToken) {
             $tokens = wp_remote_post($this->auth_url, [
