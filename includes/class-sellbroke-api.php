@@ -110,7 +110,14 @@ class Sellbroke_Api {
     }
 
     public function search($query) {
-        return $this->get("search/$query");
+        $response = $this->get("search/$query");
+
+        if (isset($response['body']['redirectTo'])) {
+            wp_redirect(get_page_link() . "/" . $response['body']['redirectTo']);
+            exit;
+        }
+
+        return $response;
     }
 
     private function getToken() {
