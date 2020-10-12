@@ -10,8 +10,9 @@ class Sellbroke_User_Observe {
         $this->api = new Sellbroke_Api();
     }
 
-    public function on_user_insert_meta($meta, $user, $update) {
-        if($update) $this->on_user_update($meta, $user);
+    public function on_user_insert_meta($meta, $user) {
+        $this->on_user_update($meta, $user);
+
         return $meta;
     }
 
