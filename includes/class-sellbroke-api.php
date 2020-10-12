@@ -64,7 +64,7 @@ class Sellbroke_Api {
             return [
                 "body" => "HTTP request error",
                 "code" => 500,
-                "message" => "HTTP request failed",
+                "message" => $response->errors,
                 "success" => false
             ];
         }
